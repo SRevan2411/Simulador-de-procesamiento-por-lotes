@@ -1,5 +1,6 @@
 import os
 import math
+import time
 
 
 masterlist = []
@@ -8,6 +9,7 @@ idlist = []
 contadorglobal = 0
 totalprocesos = 0
 processmax = 3
+lotes = 0
 
 class proceso:
     def __init__(self,programador,operacion,tiempomax,id,resultado):
@@ -24,6 +26,7 @@ def clearscreen():
 def definirprocesos():
     global totalprocesos
     global idlist
+    global splittedlist
     '''
     TOTAL DE PROCESOS
     '''
@@ -140,19 +143,77 @@ def definirprocesos():
         input("Presione ENTER para continuar.")
 
     splitlist()
+    procesamiento()
     
+ 
+def procesamiento():
+    global contadorglobal
+    global lotes
+    terminado = False
+    auxlist = []
+    i = 0
+    tiempotrans = 0
+    tiempomx = 0
+    j = splittedlist[0]
+    del splittedlist[0]
+    while True:
+        time.sleep(1)
+        if terminado == True:
+            lotes = lotes - 1
+            if(splittedlist):
+                j = splittedlist[0]
+                del splittedlist[0]
+                terminado = False
+            else:
+                break
+            
+        if i == totalprocesos:
+            break
+        contadorglobal +=1
+        
+        if(tiempotrans == tiempomx):
+            auxlist = []
+            if j:
+                auxlist.append(j[0])
+                tiempomx = auxlist[0].tiempomax
+                del j[0]
+                tiempotrans = 0
+            else:
+                terminado = True
+        if(terminado != True):
+            print("-----------------------------------------------")
+            print("Contador Global: ",contadorglobal)
+            print("Lotes restantes: ",lotes)
+            print("-----------------------------------------------")
+            print("Lote en procesamiento: ")
+            print("PROGRAMADOR        ID")
+            for proc in j:
+                print(proc.programador," ",proc.id)
+            print("-----------------------------------------------")
+            print("Proceso en ejecucion: ")
+            print(auxlist[0].programador)
+            print("Tiempo trnascurrido",tiempotrans)
+            if not j and tiempotrans == tiempomx:
+                input("Lote terminado")
+                terminado = True
+            tiempotrans += 1
+        
+        
+ 
     
 def splitlist():
-    print("Entra")
+    global lotes
     listaux = []
     j = 0
     counter = 0
     for i in masterlist:
-        if j < 3:
+        if j < 2:
             listaux.append(i)
             j = j + 1
         else:
+            listaux.append(i)
             splittedlist.append(listaux)
+            lotes += 1
             listaux = []
             j = 0
     splittedlist.append(listaux)
