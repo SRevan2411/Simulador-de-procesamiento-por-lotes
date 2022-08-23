@@ -19,6 +19,7 @@ class proceso:
         self.id = id
         self.resultado = resultado
         
+        
 
 def clearscreen():
     os.system('cls' if os.name=='nt' else 'clear')
@@ -147,6 +148,9 @@ def definirprocesos():
     
  
 def procesamiento():
+    counterlotes = []
+    countlot = 1
+    listfinal = []
     global contadorglobal
     global lotes
     terminado = False
@@ -157,16 +161,33 @@ def procesamiento():
     j = splittedlist[0]
     del splittedlist[0]
     while True:
-        time.sleep(1)
         if terminado == True:
             lotes = lotes - 1
             if(splittedlist):
                 j = splittedlist[0]
                 del splittedlist[0]
+                countlot += 1
                 terminado = False
             else:
+                lotes = 0
+                print("-----------------------------------------------")
+                print("Contador Global: ",contadorglobal)
+                print("Lotes restantes: ",lotes)
+                print("-----------------------------------------------")
+                print("Lote en procesamiento: ")
+                print("PROGRAMADOR        ID")
+                print("-----------------------------------------------")
+                print("Proceso en ejecucion: ")
+                print("-----------------------------------------------")
+                print("Procesos Terminados: ")
+                loti = 0
+                for term in listfinal:
+                    print(term.programador,term.operacion,term.resultado,counterlotes[loti])
+                    loti += 1
+                input("Proceso terminado")
+                
                 break
-            
+        
         if i == totalprocesos:
             break
         contadorglobal +=1
@@ -193,10 +214,21 @@ def procesamiento():
             print("Proceso en ejecucion: ")
             print(auxlist[0].programador)
             print("Tiempo trnascurrido",tiempotrans)
+            
+            print("-----------------------------------------------")
+            print("Procesos Terminados: ")
+            loti = 0
+            for term in listfinal:
+                print(term.programador,term.operacion,term.resultado,counterlotes[loti])
             if not j and tiempotrans == tiempomx:
                 input("Lote terminado")
                 terminado = True
             tiempotrans += 1
+            if tiempotrans == tiempomx:
+                listfinal.append(auxlist[0])
+                counterlotes.append(countlot)
+        time.sleep(1)
+        clearscreen()
         
         
  
