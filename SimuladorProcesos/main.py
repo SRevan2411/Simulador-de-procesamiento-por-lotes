@@ -33,7 +33,10 @@ def definirprocesos():
     '''
     while True:
         try:
-            totalprocesos = int(input("Bienvenido, ingrese el total de procesos"))
+            print("**********************************************")
+            print("*    SIMULADOR DE PROCESAMIENTO POR LOTES    *")
+            print("**********************************************")
+            totalprocesos = int(input("Ingrese el total de procesos: "))
             if totalprocesos > 0:
                 break
             else:
@@ -144,11 +147,13 @@ def definirprocesos():
         input("Presione ENTER para continuar.")
 
     splitlist()
+    clearscreen()
     procesamiento()
     
  
 def procesamiento():
     counterlotes = []
+    tiempores = 0
     countlot = 1
     listfinal = []
     global contadorglobal
@@ -173,19 +178,21 @@ def procesamiento():
                 print("-----------------------------------------------")
                 print("Contador Global: ",contadorglobal)
                 print("Lotes restantes: ",lotes)
-                print("-----------------------------------------------")
-                print("Lote en procesamiento: ")
-                print("PROGRAMADOR        ID")
-                print("-----------------------------------------------")
+                print("-------------------------------------------------------------")
+                print("Lote en ejecucion: ")
+                print("PROGRAMADOR  |  TIEMPO MAXIMO ESPERADO")
+                print("-------------------------------------------------------------")
                 print("Proceso en ejecucion: ")
+                print("NOMBRE|OPERACION|TIEMPO MAXIMO ESPERADO| NUMERO DE PROGRAMA")
                 print("-----------------------------------------------")
+                print("-------------------------------------------------------------")
                 print("Procesos Terminados: ")
+                print("NUMERO DE PROGRAMA|OPERACION|RESULTADO| LOTE")
                 loti = 0
                 for term in listfinal:
-                    print(term.programador,term.operacion,term.resultado,counterlotes[loti])
+                    print(term.id,"   |   ",term.operacion,"    |    ",term.resultado,"    |        ",counterlotes[loti])
                     loti += 1
-                input("Proceso terminado")
-                
+                input("Proceso terminado, presiona ENTER para finalizar")
                 break
         
         if i == totalprocesos:
@@ -197,33 +204,38 @@ def procesamiento():
             if j:
                 auxlist.append(j[0])
                 tiempomx = auxlist[0].tiempomax
+                tiempores = tiempomx
                 del j[0]
                 tiempotrans = 0
             else:
                 terminado = True
         if(terminado != True):
-            print("-----------------------------------------------")
+            print("-------------------------------------------------------------")
             print("Contador Global: ",contadorglobal)
             print("Lotes restantes: ",lotes)
-            print("-----------------------------------------------")
-            print("Lote en procesamiento: ")
-            print("PROGRAMADOR        ID")
+            print("-------------------------------------------------------------")
+            print("Lote en ejecucion: ")
+            print("PROGRAMADOR  |  TIEMPO MAXIMO ESPERADO")
             for proc in j:
-                print(proc.programador," ",proc.id)
-            print("-----------------------------------------------")
+                print(proc.programador,"         ",proc.tiempomax)
+            print("-------------------------------------------------------------")
             print("Proceso en ejecucion: ")
-            print(auxlist[0].programador)
-            print("Tiempo trnascurrido",tiempotrans)
+            print("NOMBRE|OPERACION|TIEMPO MAXIMO ESPERADO| NUMERO DE PROGRAMA")
+            print(auxlist[0].programador,"    |    ",auxlist[0].operacion,"    |    ",auxlist[0].tiempomax,"    |    ",auxlist[0].id)
+            print("TIEMPO TRANSCURRIDO: ",tiempotrans)
+            print("TIEMPO RESTANTE POR EJECUTAR:",tiempores)
             
-            print("-----------------------------------------------")
+            print("-------------------------------------------------------------")
             print("Procesos Terminados: ")
+            print("NUMERO DE PROGRAMA|OPERACION|RESULTADO| LOTE")
             loti = 0
             for term in listfinal:
-                print(term.programador,term.operacion,term.resultado,counterlotes[loti])
+                print(term.id,"   |   ",term.operacion,"    |    ",term.resultado,"    |        ",counterlotes[loti])
+                loti += 1
             if not j and tiempotrans == tiempomx:
-                input("Lote terminado")
                 terminado = True
             tiempotrans += 1
+            tiempores = tiempores - 1
             if tiempotrans == tiempomx:
                 listfinal.append(auxlist[0])
                 counterlotes.append(countlot)
@@ -256,12 +268,9 @@ def splitlist():
             print(i.programador)
     
 def main():
-    print("Este es el main")
-    p1 = proceso("Erick","1+2",23,34,33)
-    masterlist.append(p1)
-    for i in masterlist:
-        print(i.programador)
+    clearscreen()
+    definirprocesos()
     
 
 if __name__=='__main__':
-    definirprocesos()
+    main()
