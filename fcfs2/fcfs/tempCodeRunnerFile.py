@@ -1,0 +1,1 @@
+globalcounter += 1 
